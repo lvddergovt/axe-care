@@ -11,7 +11,7 @@ import SubmitButton from '../SubmitButton';
 import { useState } from 'react';
 import { UserFormValidation } from '@/lib/validation';
 import { useRouter } from 'next/navigation';
-import { createUser } from '@/lib/actions/patient.actions';
+import { createUser } from '@/lib/actions/customer.actions';
 
 export enum FormFieldType {
 	INPUT = 'input',
@@ -39,16 +39,16 @@ const CustomerForm = () => {
 	});
 
 	// 2. Define a submit handler.
-	async function onSubmit({
-		name,
-		email,
-		phone,
-	}: z.infer<typeof UserFormValidation>) {
+	const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
 		setIsLoading(true);
 
 		try {
-			const userData = { name, email, phone };
-			const newUser = await createUser(userData);
+			const user = {
+				name: values.name,
+				email: values.email,
+				phone: values.phone,
+			};
+			const newUser = await createUser(user);
 
 			if (newUser) {
 				router.push(`/customers/${newUser.$id}/register`);
@@ -58,7 +58,7 @@ const CustomerForm = () => {
 		}
 
 		setIsLoading(false);
-	}
+	};
 	return (
 		<Form {...form}>
 			<form

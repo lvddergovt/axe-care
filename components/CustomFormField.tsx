@@ -15,6 +15,9 @@ import Image from 'next/image';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { E164Number } from 'libphonenumber-js/core';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface CustomProps {
 	control: Control<any>;
@@ -32,18 +35,16 @@ interface CustomProps {
 }
 
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
-	const { fieldType, iconSrc, iconAlt, placeholder } = props;
-
-	switch (fieldType) {
+	switch (props.fieldType) {
 		case FormFieldType.INPUT:
 			return (
 				<div className="flex rounded-md border border-dark-500 bg-dark-400">
-					{iconSrc && (
+					{props.iconSrc && (
 						<Image
-							src={iconSrc}
+							src={props.iconSrc}
 							height={24}
 							width={24}
-							alt={iconAlt || 'icon'}
+							alt={props.iconAlt || 'icon'}
 							className="ml-2"
 						/>
 					)}
@@ -51,7 +52,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 					<FormControl>
 						<Input
 							{...field}
-							placeholder={placeholder}
+							placeholder={props.placeholder}
 							className="shad-input border-0"
 						/>
 					</FormControl>
@@ -62,13 +63,50 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 				<FormControl>
 					<PhoneInput
 						defaultCountry="NL"
-						placeholder={placeholder}
+						placeholder={props.placeholder}
 						international
 						withCountryCallingCode
 						value={field.value as E164Number | undefined}
 						onChange={field.onChange}
 						className="input-phone"
 					/>
+				</FormControl>
+			);
+		case FormFieldType.DATE_PICKER:
+			return (
+				<div className="flex rounded-md border border-dark-500 bg-dark-400">
+					<Image
+						src="/assets/icons/calendar.svg"
+						height={24}
+						width={24}
+						alt="user"
+						className="ml-2"
+					/>
+					<FormControl>
+						<DatePicker
+							showTimeSelect={props.showTimeSelect ?? false}
+							selected={field.value}
+							onChange={(date) => field.onChange(date)}
+							timeInputLabel="Time:"
+							dateFormat={props.dateFormat ?? 'MM/dd/yyyy'}
+							wrapperClassName="date-picker"
+						/>
+					</FormControl>
+				</div>
+			);
+		case FormFieldType.CHECKBOX:
+			return (
+				<FormControl>
+					<div className="flex items-center gap-4">
+						<Checkbox
+							id={props.name}
+							checked={field.value}
+							onCheckedChange={field.onChange}
+						/>
+						<label htmlFor={props.name} className="checkbox-label">
+							{props.label}
+						</label>
+					</div>
 				</FormControl>
 			);
 		default:
