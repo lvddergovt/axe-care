@@ -42,7 +42,7 @@ AxeCare is a web application that simplifies the process of booking appointments
 
 ## Tech Stack
 
-- **Frontend:** Next.js, Tailwind, Shadcn
+- **Frontend:** Next.js, Tailwind, Shadcn, Jest
 - **Database:** AppWrite
 - **Notifications:** Twilio
 - **Version Control:** Git
