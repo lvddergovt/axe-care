@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import CustomFormField from '../CustomFormField';
 import SubmitButton from '../SubmitButton';
 import { useState } from 'react';
-import { UserFormValidation } from '@/lib/validation';
+import { CustomerFormValidation } from '@/lib/validation';
 import { useRouter } from 'next/navigation';
 import { createUser, registerCustomer } from '@/lib/actions/customer.actions';
 import { FormFieldType } from './CustomerForm';
@@ -21,8 +21,8 @@ const RegisterForm = ({ user }: { user: User }) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	// 1. Define your form.
-	const form = useForm<z.infer<typeof UserFormValidation>>({
-		resolver: zodResolver(UserFormValidation),
+	const form = useForm<z.infer<typeof CustomerFormValidation>>({
+		resolver: zodResolver(CustomerFormValidation),
 		defaultValues: {
 			...CustomerFormDefaultValues,
 			name: user.name,
@@ -32,7 +32,7 @@ const RegisterForm = ({ user }: { user: User }) => {
 	});
 
 	// 2. Define a submit handler.
-	const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
+	const onSubmit = async (values: z.infer<typeof CustomerFormValidation>) => {
 		setIsLoading(true);
 
 		const normalizedPhone = values.phone.replace(/\s+/g, '');
@@ -114,9 +114,6 @@ const RegisterForm = ({ user }: { user: User }) => {
 					control={form.control}
 					name="birthDate"
 					label="Date of birth"
-					placeholder="johndoe@gmail.com"
-					iconSrc="/assets/icons/email.svg"
-					iconAlt="Email icon"
 				/>
 
 				<CustomFormField

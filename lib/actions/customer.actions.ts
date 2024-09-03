@@ -45,9 +45,23 @@ export const getUser = async (userId: string) => {
 	}
 };
 
+export const getCustomer = async (userId: string) => {
+	try {
+		const customers = await databases.listDocuments(
+			DATABASE_ID!,
+			CUSTOMER_COLLECTION_ID!,
+			[Query.equal('userId', userId)]
+		);
+
+		return parseStringify(customers.documents[0]);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 export const registerCustomer = async ({ ...customer }: RegisterUserParams) => {
 	try {
-		const newPatient = await databases.createDocument(
+		const newCustomer = await databases.createDocument(
 			DATABASE_ID!,
 			CUSTOMER_COLLECTION_ID!,
 			ID.unique(),
@@ -56,8 +70,11 @@ export const registerCustomer = async ({ ...customer }: RegisterUserParams) => {
 			}
 		);
 
-		return parseStringify(newPatient);
+		return parseStringify(newCustomer);
 	} catch (error) {
-		console.error('An error occurred while creating a new patient:', error);
+		console.error(
+			'An error occurred while creating a new customer:',
+			error
+		);
 	}
 };
