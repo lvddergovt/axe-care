@@ -35,22 +35,24 @@ const RegisterForm = ({ user }: { user: User }) => {
 	const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
 		setIsLoading(true);
 
+		const normalizedPhone = values.phone.replace(/\s+/g, '');
+
 		try {
-			const patient = {
+			const customer = {
 				userId: user.$id,
 				name: values.name,
 				email: values.email,
-				phone: values.phone,
+				phone: normalizedPhone,
 				birthDate: new Date(values.birthDate),
 				address: values.address,
 				treatmentConsent: values.treatmentConsent,
 				privacyConsent: values.privacyConsent,
 			};
 
-			const newPatient = await registerCustomer(patient);
+			const newCustomer = await registerCustomer(customer);
 
-			if (newPatient) {
-				router.push(`/patients/${user.$id}/new-appointment`);
+			if (newCustomer) {
+				router.push(`/customers/${user.$id}/new-appointment`);
 			}
 		} catch (error) {
 			console.log(error);
